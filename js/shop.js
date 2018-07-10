@@ -1,8 +1,12 @@
 var index_js = (function(){
+    // 展示数据的盒子
     var $ul = $('.tbox');
+
     var shopList = localStorage.shopList || '[]';
     shopList = JSON.parse(shopList);
+
     return {
+        // 初始化函数
         init() {
             this.events();
             this.insertData(shopList);
@@ -38,30 +42,28 @@ var index_js = (function(){
             localStorage.shopList= JSON.stringify(shopList);
             console.log(localStorage.shopList)
         },
+        //  事件函数
         events() {
             var _this = this;
             $ul.on('change', 'input', function() {
-                // 获取此li
+                // 获取此tr
                 var tr = $(this).closest('tr');
-                // 获取文本值
+                // 获取文本值(商品更新后的数据)
                 var val = $(this).val();
+                // 修改对应数据
                 shopList[tr.index()].count = val;
+                // 存入本地数据库
                 localStorage.shopList = JSON.stringify(shopList);
                 
             })
             $ul.on('click', '.del-btn', function() {
                var tr = $(this).closest('tr');
+               // 删除数组中对应的数据
                shopList.splice(tr.index(), 1);
+               // 存入到本地数据库
                localStorage.shopList = JSON.stringify(shopList);
+               // 移出dom元素
                tr.remove()
-                // 获取此li
-                // var li = $(this).closest('li');
-                // var obj = {
-                //     id: li.attr('id'),
-                //     count: Number(li.find('input').val()),
-                //     name: li.children('.name').html()
-                // }
-                // _this.addShop(obj);
             })
         }
     }
